@@ -96,6 +96,19 @@ Pushing to `main` builds and deploys the site automatically. The workflow sets `
 
 In the repository settings, Pages must use **GitHub Actions** as its source.
 
+## Monthly trend update (automated)
+
+A scheduled Claude cloud routine runs on the 1st of every month (13:00 UTC). It:
+
+1. Checks that every YouTube ID in `challenges.json` still works (`scripts/yt-verify.mjs --all`)
+2. Moves `trending` entries older than last year to `past`
+3. Researches what is popular now and adds 3 to 6 new challenges
+4. Builds the site, then commits **directly to `main`** as `Monthly trend update YYYY-MM` (the commit message lists what changed and the sources)
+
+Only `src/data/challenges.json` is touched, and the site deploys automatically. If something looks wrong, revert that commit.
+
+Manage or run it from https://claude.ai/code/routines. The instructions it follows live in the routine itself, not in this repo, so keep the schema and guidelines in this README up to date: the routine reads them every run.
+
 ## Things to keep
 
 - `public/google2a7f329f4ff23189.html` verifies the site in Google Search Console. Do not delete it, or the verification is lost.
