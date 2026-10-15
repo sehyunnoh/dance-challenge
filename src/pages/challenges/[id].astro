@@ -16,6 +16,14 @@ const embed = (id: string) => `https://www.youtube-nocookie.com/embed/${id}`;
   <h1 class="mt-2 font-display text-3xl font-extrabold sm:text-4xl">{d.title}</h1>
   <p class="text-ink/70">{d.artist} · {d.year}</p>
 
+  <div id="tracker" data-id={c.id} class="mt-4 flex flex-wrap items-center gap-2">
+    <button type="button" id="fav" class="chip" aria-pressed="false">♡ Favorite</button>
+    <span class="mx-1 hidden h-6 w-px bg-ink/20 sm:block"></span>
+    {[['none', 'Not started'], ['practicing', 'Practicing'], ['filmed', 'Filmed ✅']].map(([v, text]) => (
+      <button type="button" data-status={v} class="chip" aria-pressed="false">{text}</button>
+    ))}
+  </div>
+
   <div class="mt-6 aspect-video overflow-hidden rounded-2xl border-2 border-ink shadow-[4px_4px_0_0_var(--color-ink)]">
     <iframe src={embed(d.youtubeId)} title={d.title} class="h-full w-full" loading="lazy" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
   </div>
@@ -39,3 +47,26 @@ const embed = (id: string) => `https://www.youtube-nocookie.com/embed/${id}`;
     </section>
   )}
 </Layout>
+
+<script>
+  import { getEntry, setEntry, onChange } from '../../scripts/tracker';
+
+  const root = document.getElementById('tracker')!;
+  const id = root.dataset.id!;
+  const fav = document.getElementById('fav')!;
+  const statusBtns = root.querySelectorAll<HTMLButtonElement>('[data-status]');
+
+  function render() {
+    const e = getEntry(id);
+    fav.setAttribute('aria-pressed', String(e.fav));
+    fav.textContent = e.fav ? '♥ Favorited' : '♡ Favorite';
+    statusBtns.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.status === e.status)));
+  }
+
+  fav.addEventListener('click', () => setEntry(id, { fav: !getEntry(id).fav }));
+  statusBtns.forEach((b) =>
+    b.addEventListener('click', () => setEntry(id, { status: b.dataset.status as 'none' | 'practicing' | 'filmed' })),
+  );
+  onChange(render);
+  render();
+</script>

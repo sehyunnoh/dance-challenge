@@ -11,3 +11,8 @@
 
 html { background: var(--color-paper); color: var(--color-ink); }
 body { font-family: ui-sans-serif, system-ui, sans-serif; }
+
+/* Pill button used for filters and the practice tracker. */
+.chip { flex: none; min-height: 2.5rem; border: 2px solid var(--color-ink); border-radius: 9999px; padding: 0 1rem; font-size: 0.9rem; font-weight: 600; background: white; cursor: pointer; }
+@media (min-width: 640px) { .chip { min-height: 2.25rem; } }
+.chip-on, .chip[aria-pressed="true"] { background: var(--color-pop); color: white; }

@@ -6,13 +6,21 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const challenges = (await getCollection('challenges')).sort((a, b) => b.data.year - a.data.year);
 
 const filters = {
+  mine: ['favorites', 'practicing', 'filmed'],
   era: ['trending', 'past'],
   difficulty: ['easy', 'medium', 'hard'],
   group: ['solo', 'duo', 'group'],
   origin: ['kpop', 'tiktok', 'western', 'other'],
 };
-const label = (s: string) =>
-  s === 'kpop' ? 'K-pop' : s === 'tiktok' ? 'TikTok' : s === 'past' ? 'Past hits' : s[0].toUpperCase() + s.slice(1);
+const labels: Record<string, string> = {
+  kpop: 'K-pop',
+  tiktok: 'TikTok',
+  past: 'Past hits',
+  favorites: '♥ Favorites',
+  filmed: 'Filmed ✅',
+  mine: 'My list',
+};
+const label = (s: string) => labels[s] ?? s[0].toUpperCase() + s.slice(1);
 ---
 <Layout>
   <h1 class="font-display text-3xl font-extrabold sm:text-4xl">Find your next dance challenge</h1>
@@ -21,7 +29,7 @@ const label = (s: string) =>
   <div id="filters" class="mt-6 space-y-3">
     {Object.entries(filters).map(([key, values]) => (
       <div class="flex flex-col gap-1 sm:flex-row sm:flex-wrap sm:items-center sm:gap-2" data-filter-group={key}>
-        <span class="text-xs font-bold uppercase tracking-wide text-ink/60 sm:w-24 sm:text-sm sm:normal-case sm:tracking-normal sm:capitalize">{key}</span>
+        <span class="text-xs font-bold uppercase tracking-wide text-ink/60 sm:w-24 sm:text-sm sm:normal-case sm:tracking-normal sm:capitalize">{label(key)}</span>
         <div class="chip-row -mx-4 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 sm:pb-0">
           <button type="button" data-value="" class="chip chip-on">All</button>
           {values.map((v) => <button type="button" data-value={v} class="chip">{label(v)}</button>)}
@@ -32,7 +40,7 @@ const label = (s: string) =>
 
   <ul id="grid" class="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
     {challenges.map((c) => (
-      <li data-era={c.data.era} data-difficulty={c.data.difficulty} data-group={c.data.group} data-origin={c.data.origin}>
+      <li class="relative" data-id={c.id} data-era={c.data.era} data-difficulty={c.data.difficulty} data-group={c.data.group} data-origin={c.data.origin} data-mine="">
         <a href={`${base}/challenges/${c.id}/`} class="block overflow-hidden rounded-2xl border-2 border-ink bg-white shadow-[4px_4px_0_0_var(--color-ink)] transition hover:-translate-y-1">
           <img src={`https://i.ytimg.com/vi/${c.data.youtubeId}/hqdefault.jpg`} alt="" loading="lazy" class="aspect-video w-full object-cover" />
           <div class="p-4">
@@ -42,9 +50,11 @@ const label = (s: string) =>
               <span class="rounded-full bg-sun px-2 py-1">{label(c.data.difficulty)}</span>
               <span class="rounded-full bg-mint/30 px-2 py-1">{label(c.data.group)}</span>
               <span class="rounded-full bg-pop/15 px-2 py-1">{label(c.data.origin)}</span>
+              <span class="status-badge hidden rounded-full bg-ink px-2 py-1 text-white"></span>
             </div>
           </div>
         </a>
+        <button type="button" class="fav-btn" aria-pressed="false" aria-label={`Favorite ${c.data.title}`}>♡</button>
       </li>
     ))}
   </ul>
@@ -52,22 +62,39 @@ const label = (s: string) =>
 </Layout>
 
 <style is:global>
-  .chip { flex: none; min-height: 2.5rem; border: 2px solid var(--color-ink); border-radius: 9999px; padding: 0 1rem; font-size: 0.9rem; font-weight: 600; background: white; cursor: pointer; }
-  @media (min-width: 640px) { .chip { min-height: 2.25rem; } }
   .chip-row { scrollbar-width: none; }
   .chip-row::-webkit-scrollbar { display: none; }
-  .chip-on { background: var(--color-pop); color: white; }
+  .fav-btn { position: absolute; top: 0.5rem; right: 0.5rem; width: 2.75rem; height: 2.75rem; border: 2px solid var(--color-ink); border-radius: 9999px; background: white; font-size: 1.4rem; line-height: 1; cursor: pointer; }
+  .fav-btn[aria-pressed="true"] { background: var(--color-pop); color: white; }
 </style>
 
 <script>
+  import { getEntry, setEntry, onChange, STATUS_LABEL } from '../scripts/tracker';
+
   const active: Record<string, string> = {};
   const items = document.querySelectorAll<HTMLElement>('#grid > li');
   const empty = document.getElementById('empty')!;
 
+  // Sync every card with the saved list, then re-apply filters.
+  function render() {
+    items.forEach((li) => {
+      const e = getEntry(li.dataset.id!);
+      const btn = li.querySelector<HTMLButtonElement>('.fav-btn')!;
+      btn.setAttribute('aria-pressed', String(e.fav));
+      btn.textContent = e.fav ? '♥' : '♡';
+      const badge = li.querySelector<HTMLElement>('.status-badge')!;
+      badge.textContent = STATUS_LABEL[e.status];
+      badge.classList.toggle('hidden', e.status === 'none');
+      li.dataset.mine = [e.fav ? 'favorites' : '', e.status !== 'none' ? e.status : ''].join(' ').trim();
+    });
+    apply();
+  }
+
   function apply() {
     let shown = 0;
     items.forEach((li) => {
-      const ok = Object.entries(active).every(([k, v]) => !v || li.dataset[k] === v);
+      // Values can hold several words (e.g. "favorites practicing"), so match on a word.
+      const ok = Object.entries(active).every(([k, v]) => !v || (li.dataset[k] ?? '').split(' ').includes(v));
       li.classList.toggle('hidden', !ok);
       if (ok) shown++;
     });
@@ -83,4 +110,14 @@ const label = (s: string) =>
       });
     });
   });
+
+  items.forEach((li) => {
+    li.querySelector('.fav-btn')!.addEventListener('click', () => {
+      const id = li.dataset.id!;
+      setEntry(id, { fav: !getEntry(id).fav });
+    });
+  });
+
+  onChange(render);
+  render();
 </script>
