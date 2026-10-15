@@ -69,15 +69,19 @@ Add an object to `src/data/challenges.json`. The build fails if a field is inval
 | `notes` | Optional extra info |
 | `tags` | Optional list of words |
 
-### Checking a YouTube ID
+### Finding and checking YouTube IDs
 
-Confirm that the ID is the video you expect, and that it can be embedded:
+Two small helper scripts (plain Node, no dependencies):
 
 ```bash
-curl -s "https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=VIDEO_ID&format=json"
+node scripts/yt-search.mjs "ATEEZ BAD dance practice"   # top 5 results: id | title | channel | length | views
+node scripts/yt-verify.mjs ID [ID...]                    # title, channel, upload date; fails if missing or not embeddable
+node scripts/yt-verify.mjs --all                         # check every ID in challenges.json
 ```
 
-A normal response includes the title and channel. An error (401, 404) means the video is missing or cannot be embedded. Prefer official channel uploads.
+Prefer official channel uploads. The upload date is a good source for `year`.
+
+`yt-search` reads YouTube's public search page, so it can break if YouTube changes that page.
 
 ### Guidelines for this site
 
