@@ -1,0 +1,103 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const sections = [
+  {
+    emoji: '🎯',
+    title: 'Pick and practice',
+    items: [
+      'Choose a challenge together. Let each kid veto one, so both are excited.',
+      'Watch the tutorial at half speed first, then learn the dance in small chunks (8 counts at a time).',
+      'Practice facing a mirror, then film a rehearsal on your phone and watch it back together.',
+      'Pick a challenge that fits both ages. Easy ones can pair a 7th grader and a 4th grader without anyone feeling left behind.',
+    ],
+  },
+  {
+    emoji: '📱',
+    title: 'Set up the shot',
+    items: [
+      'Shorts and Reels are vertical (9:16). Hold the phone upright. Use horizontal only for a regular YouTube video.',
+      'Put the phone at about waist height, and leave room above heads and below feet so everyone fits in the frame.',
+      'Prop the phone on a stack of books or a cheap tripod so it stays still. Tape a mark on the floor for where to stand.',
+      'Clean up the background. Use the back camera if you can, since it is usually sharper than the selfie camera.',
+    ],
+  },
+  {
+    emoji: '💡',
+    title: 'Light and sound',
+    items: [
+      'Face the light. A window in front of the dancers works better than one behind them.',
+      'Avoid dark clothes against a dark wall, and avoid busy patterns that blur on camera.',
+      'Play the song from a speaker so the dancers can hear it. Keep the volume steady across takes.',
+      'Wear shoes with grip, and clear the floor. Safe and comfortable beats fancy.',
+    ],
+  },
+  {
+    emoji: '🎬',
+    title: 'Film and edit',
+    items: [
+      'Start recording a few seconds early and use a 3-2-1 count so every take starts together.',
+      'Film several takes. The 3rd or 4th is usually the best one, and the outtakes are fun to keep.',
+      'Trim the start and end in a free editor (for example the YouTube Create app or CapCut), then add a short title.',
+      'Add the song and challenge name in the description so viewers can find the original.',
+    ],
+  },
+  {
+    emoji: '🛡️',
+    title: 'Upload safely',
+    items: [
+      'In YouTube Studio, set the audience for kids correctly for each video. YouTube asks you to choose, and the answer changes how comments and ads work.',
+      'Think about turning comments off or holding them for review, especially for videos with children.',
+      'Do not show names, school logos or uniforms, the street, or other details that reveal where the kids live or go to school.',
+      'Check location settings on the phone, and avoid sharing the video link in public places that identify the kids.',
+      'Popular songs are often covered by copyright. Videos may get a claim or be muted. Picking the song from the music library inside YouTube Shorts is usually the safest route, and the YouTube Audio Library has free music.',
+      'Ask the kids before posting. If one of them is not happy with the video, do not upload it.',
+    ],
+  },
+];
+
+const checklist = [
+  'Dance learned and rehearsed',
+  'Phone upright, steady and fully charged',
+  'Light in front, background tidy',
+  'Song ready on a speaker',
+  'Floor clear, shoes with grip',
+  '3-2-1 count, 3 or more takes',
+  'No personal details visible',
+  'Kids approve the final video',
+];
+---
+<Layout title="Filming tips – Dance Challenge Hub" description="Simple tips for filming dance challenges at home with kids.">
+  <h1 class="font-display text-3xl font-extrabold sm:text-4xl">Filming tips</h1>
+  <p class="mt-2 max-w-2xl text-ink/70">
+    Everything you need for a good take at home, from practice to upload.{' '}
+    <a href={`${base}/`} class="font-semibold text-pop underline">Pick a challenge</a> first.
+  </p>
+
+  <div class="mt-8 grid gap-5 lg:grid-cols-2">
+    {sections.map((s) => (
+      <section class="rounded-2xl border-2 border-ink bg-white p-5 shadow-[4px_4px_0_0_var(--color-ink)]">
+        <h2 class="font-display text-2xl font-bold"><span aria-hidden="true">{s.emoji}</span> {s.title}</h2>
+        <ul class="mt-3 list-disc space-y-2 pl-5 text-ink/80">
+          {s.items.map((i) => <li>{i}</li>)}
+        </ul>
+      </section>
+    ))}
+  </div>
+
+  <section id="checklist" class="mt-8 rounded-2xl border-2 border-ink bg-sun/30 p-5">
+    <h2 class="font-display text-2xl font-bold">Before you hit record</h2>
+    <ul class="mt-3 grid gap-2 sm:grid-cols-2">
+      {checklist.map((c) => (
+        <li>
+          <label class="flex min-h-11 cursor-pointer items-center gap-3">
+            <input type="checkbox" class="h-5 w-5 accent-pop" />
+            <span>{c}</span>
+          </label>
+        </li>
+      ))}
+    </ul>
+  </section>
+</Layout>
