@@ -1,0 +1,29 @@
+---
+import '../styles/global.css';
+interface Props { title?: string; description?: string }
+const { title = 'Dance Challenge Hub', description = 'Dance challenges to learn and film together.' } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+  </head>
+  <body class="min-h-screen">
+    <header class="border-b-4 border-pop bg-ink text-white">
+      <div class="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
+        <a href={`${base}/`} class="font-display text-2xl font-extrabold tracking-tight">
+          Dance<span class="text-sun">Challenge</span> Hub
+        </a>
+        <span class="hidden text-sm text-white/70 sm:block">Learn it. Practice it. Film it.</span>
+      </div>
+    </header>
+    <main class="mx-auto max-w-6xl px-4 py-8"><slot /></main>
+    <footer class="mx-auto max-w-6xl px-4 py-8 text-sm text-ink/60">
+      Videos are embedded from YouTube and belong to their creators. Always preview a video before practicing with kids.
+    </footer>
+  </body>
+</html>

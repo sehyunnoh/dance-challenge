@@ -1,0 +1,86 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../layouts/Layout.astro';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const challenges = (await getCollection('challenges')).sort((a, b) => b.data.year - a.data.year);
+
+const filters = {
+  era: ['trending', 'past'],
+  difficulty: ['easy', 'medium', 'hard'],
+  group: ['solo', 'duo', 'group'],
+  origin: ['kpop', 'tiktok', 'western', 'other'],
+};
+const label = (s: string) =>
+  s === 'kpop' ? 'K-pop' : s === 'tiktok' ? 'TikTok' : s === 'past' ? 'Past hits' : s[0].toUpperCase() + s.slice(1);
+---
+<Layout>
+  <h1 class="font-display text-3xl font-extrabold sm:text-4xl">Find your next dance challenge</h1>
+  <p class="mt-2 max-w-2xl text-ink/70">Trending hits and all-time favorites, picked for kids and families.</p>
+
+  <div id="filters" class="mt-6 space-y-3">
+    {Object.entries(filters).map(([key, values]) => (
+      <div class="flex flex-col gap-1 sm:flex-row sm:flex-wrap sm:items-center sm:gap-2" data-filter-group={key}>
+        <span class="text-xs font-bold uppercase tracking-wide text-ink/60 sm:w-24 sm:text-sm sm:normal-case sm:tracking-normal sm:capitalize">{key}</span>
+        <div class="chip-row -mx-4 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 sm:pb-0">
+          <button type="button" data-value="" class="chip chip-on">All</button>
+          {values.map((v) => <button type="button" data-value={v} class="chip">{label(v)}</button>)}
+        </div>
+      </div>
+    ))}
+  </div>
+
+  <ul id="grid" class="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+    {challenges.map((c) => (
+      <li data-era={c.data.era} data-difficulty={c.data.difficulty} data-group={c.data.group} data-origin={c.data.origin}>
+        <a href={`${base}/challenges/${c.id}/`} class="block overflow-hidden rounded-2xl border-2 border-ink bg-white shadow-[4px_4px_0_0_var(--color-ink)] transition hover:-translate-y-1">
+          <img src={`https://i.ytimg.com/vi/${c.data.youtubeId}/hqdefault.jpg`} alt="" loading="lazy" class="aspect-video w-full object-cover" />
+          <div class="p-4">
+            <h2 class="font-display text-xl font-bold leading-tight">{c.data.title}</h2>
+            <p class="text-sm text-ink/70">{c.data.artist} · {c.data.year}</p>
+            <div class="mt-3 flex flex-wrap gap-2 text-xs font-semibold">
+              <span class="rounded-full bg-sun px-2 py-1">{label(c.data.difficulty)}</span>
+              <span class="rounded-full bg-mint/30 px-2 py-1">{label(c.data.group)}</span>
+              <span class="rounded-full bg-pop/15 px-2 py-1">{label(c.data.origin)}</span>
+            </div>
+          </div>
+        </a>
+      </li>
+    ))}
+  </ul>
+  <p id="empty" class="mt-8 hidden text-ink/60">No challenges match these filters.</p>
+</Layout>
+
+<style is:global>
+  .chip { flex: none; min-height: 2.5rem; border: 2px solid var(--color-ink); border-radius: 9999px; padding: 0 1rem; font-size: 0.9rem; font-weight: 600; background: white; cursor: pointer; }
+  @media (min-width: 640px) { .chip { min-height: 2.25rem; } }
+  .chip-row { scrollbar-width: none; }
+  .chip-row::-webkit-scrollbar { display: none; }
+  .chip-on { background: var(--color-pop); color: white; }
+</style>
+
+<script>
+  const active: Record<string, string> = {};
+  const items = document.querySelectorAll<HTMLElement>('#grid > li');
+  const empty = document.getElementById('empty')!;
+
+  function apply() {
+    let shown = 0;
+    items.forEach((li) => {
+      const ok = Object.entries(active).every(([k, v]) => !v || li.dataset[k] === v);
+      li.classList.toggle('hidden', !ok);
+      if (ok) shown++;
+    });
+    empty.classList.toggle('hidden', shown > 0);
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-filter-group]').forEach((group) => {
+    group.querySelectorAll<HTMLButtonElement>('button').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        active[group.dataset.filterGroup!] = btn.dataset.value ?? '';
+        group.querySelectorAll('button').forEach((b) => b.classList.toggle('chip-on', b === btn));
+        apply();
+      });
+    });
+  });
+</script>
