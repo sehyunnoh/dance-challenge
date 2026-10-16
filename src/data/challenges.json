@@ -443,5 +443,20 @@
   },
   {"id": "redred-cortis", "title": "REDRED", "artist": "CORTIS", "youtubeId": "kuVNutQeBBA", "tutorialYoutubeId": "FXXxSunPWAE", "year": 2026, "era": "trending", "origin": "kpop", "difficulty": "easy", "group": "group", "kidFriendly": "Lyrics not reviewed. Preview before practicing.", "notes": "Official dance practice. Korean news describes the chorus moves (hands waving by the ears, arms crossed in an X) as easy to follow, so this is a good pick for a 4th-grade boy. The tutorial is a slowed, mirrored clip by a dance creator (Sing Sing).", "tags": ["boy-group", "easy-pick", "challenge"]},
   {"id": "made-my-night-le-sserafim", "title": "Made My Night", "artist": "LE SSERAFIM", "youtubeId": "KqGcADy7zcg", "year": 2026, "era": "trending", "origin": "kpop", "difficulty": "hard", "group": "group", "kidFriendly": "Lyrics not reviewed. Preview before practicing.", "notes": "Official dance practice for the September 2026 single. Fast, sharp choreography, so plan for lots of practice time.", "tags": ["girl-group", "new-release"]},
-  {"id": "takedown-huntrx-twice", "title": "Takedown", "artist": "HUNTR/X ft. TWICE (KPop Demon Hunters)", "youtubeId": "N9LE_xquwUM", "year": 2025, "era": "trending", "origin": "kpop", "difficulty": "medium", "group": "group", "kidFriendly": "Lyrics not reviewed. Preview before practicing. The song is from the KPop Demon Hunters animated movie, but check it yourself first.", "notes": "Dance performance uploaded by Netflix with the B-Wild crew from Vietnam. Fits the movie fans in the family.", "tags": ["movie", "netflix", "girl-group-style"]}
+  {"id": "takedown-huntrx-twice", "title": "Takedown", "artist": "HUNTR/X ft. TWICE (KPop Demon Hunters)", "youtubeId": "N9LE_xquwUM", "year": 2025, "era": "trending", "origin": "kpop", "difficulty": "medium", "group": "group", "kidFriendly": "Lyrics not reviewed. Preview before practicing. The song is from the KPop Demon Hunters animated movie, but check it yourself first.", "notes": "Dance performance uploaded by Netflix with the B-Wild crew from Vietnam. Fits the movie fans in the family.", "tags": ["movie", "netflix", "girl-group-style"]},
+  {
+    "id": "neon-a2o-lite",
+    "title": "NEON",
+    "artist": "A2O LITE",
+    "youtubeId": "93j1fDGi_-8",
+    "tutorialYoutubeId": "EYssiY2WGFQ",
+    "year": 2026,
+    "era": "trending",
+    "origin": "kpop",
+    "difficulty": "medium",
+    "group": "group",
+    "kidFriendly": "Lyrics not reviewed. Preview before practicing.",
+    "notes": "The group is spelled A2O LITE (a letter O, not a zero). Video is the full 4K performance uploaded by M2. The tutorial is a full step-by-step lesson by a Korean dance instructor (zindance).",
+    "tags": ["girl-group", "new-release"]
+  }
 ]
