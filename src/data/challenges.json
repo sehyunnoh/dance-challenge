@@ -458,5 +458,33 @@
     "kidFriendly": "Lyrics not reviewed. Preview before practicing.",
     "notes": "The group is spelled A2O LITE (a letter O, not a zero). Video is the full 4K performance uploaded by M2. The tutorial is a full step-by-step lesson by a Korean dance instructor (zindance).",
     "tags": ["girl-group", "new-release"]
+  },
+  {
+    "id": "viral-boynextdoor",
+    "title": "VIRAL",
+    "artist": "BOYNEXTDOOR",
+    "youtubeId": "zGsj0fDHB_s",
+    "year": 2026,
+    "era": "trending",
+    "origin": "kpop",
+    "difficulty": "medium",
+    "group": "group",
+    "kidFriendly": "Lyrics not reviewed. Preview before practicing.",
+    "notes": "Title track of their first full album HOME (June 2026). The video is the official MV from HYBE LABELS; its choreography went viral as a short-form challenge, including collabs with senior artists like Zico.",
+    "tags": ["boy-group", "new-release"]
+  },
+  {
+    "id": "pinky-up-katseye",
+    "title": "PINKY UP",
+    "artist": "KATSEYE",
+    "youtubeId": "7F1ET2XHQfk",
+    "year": 2026,
+    "era": "trending",
+    "origin": "kpop",
+    "difficulty": "medium",
+    "group": "group",
+    "kidFriendly": "Lyrics not reviewed. Preview before practicing.",
+    "notes": "April 2026 single. The signature move is raising the pinky finger and spinning; the dance challenge was joined by many creators. Video is the official MV from HYBE LABELS, not a dance practice.",
+    "tags": ["girl-group", "new-release"]
   }
 ]
